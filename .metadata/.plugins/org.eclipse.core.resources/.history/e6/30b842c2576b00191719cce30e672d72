@@ -1,0 +1,120 @@
+package interview1;
+import java.util.*;
+/* Key = Any Data
+ * Hash Table = Map Data to hash values i.e. ints or longs
+ * 1st -> Compute Data's Hash code -> Hash code not unique to one Key
+ * 2nd -> Map the Hash code to index in array. Can map two codes to same index
+ * 3rd -> At index -> Linked List of Keys and Values.
+ * Runtime -> Good Implementation - O(1). Worst Case - O(N)
+ * Alternatively -> Hash Table can be a Balanced BST -> Runtime O(logN)
+ */
+public class HashTable {
+
+	public static void main(String[] args) {
+		String testWord = "abcdefghijklmnopqrstuvwxyz";
+		String testWord2 = "abca";
+		String testWord3 = "";		
+		String testWord4 = "odstringe";
+		String testWord5 = "odd";
+		String testWord6 = "abcdefghe";
+		
+		long startTime = System.nanoTime();
+		System.out.println("Should be true: " + isUnique(testWord));
+		long endTime = System.nanoTime();
+		System.out.println("Naive :" + (endTime - startTime));
+		
+		long startTime2 = System.nanoTime();
+		System.out.println("Should be true: " + isUniqueChars(testWord));
+		long endTime2 = System.nanoTime();
+		System.out.println("Optimized :" + (endTime2 - startTime2));
+		
+		
+		long startTime3 = System.nanoTime();
+		System.out.println("Should be false: " + isUnique(testWord2));
+		long endTime3 = System.nanoTime();
+		System.out.println("Naive: " + (endTime3 - startTime3));
+		
+		long startTime4 = System.nanoTime();
+		System.out.println("Should be false: " + isUniqueChars(testWord2));
+		long endTime4 = System.nanoTime();
+		System.out.println("Optimized +" + (endTime4 - startTime4));
+		System.out.println("Should be true: " + isUnique(testWord3));
+		System.out.println("Should be true: " + isUniqueChars(testWord3));
+
+		System.out.println("Should be true: " + isUnique(testWord4));
+		System.out.println("Should be true: " + isUniqueChars(testWord4));
+
+		System.out.println("Should be false: " + isUnique(testWord5));
+		System.out.println("Should be false: " + isUniqueChars(testWord5));
+
+		System.out.println("Should be false: " + isUnique(testWord6));
+		System.out.println("Should be false: " + isUniqueChars(testWord6));
+
+	}
+
+	
+/*
+ * merge = double array list
+ * runtime = O(N) but happens so rarely that amoritized is O(1)
+ */
+ArrayList<String> merge(String[] words, String[] more){
+	ArrayList<String> sentence = new ArrayList<String>();
+	for(String w : words) sentence.add(w);
+	for(String w:more) sentence.add(w);
+	return sentence;
+}
+/*
+ * sConcatanator = joins words together in a string
+ * runtime = O(n^2) because Sigma(1 to n) = n(n+1)/2 = n^2(x) or O(n^2)
+ */
+String sConcatanator(String[] words) {
+	String sentence = "";
+	
+	for(String w : words) sentence += w;
+	
+	return sentence;
+}
+/*
+ * string builder - better for concatenating
+ * runtime = O(n) worst case, best O(1)
+ */
+
+String joinWords(String[] words) {
+	StringBuilder sentence = new StringBuilder();
+	for(String w : words) sentence.append(w);
+	
+	return sentence.toString();
+	
+}
+
+static boolean isUnique(String word) {
+	if(word.length() == 0) return true; //count the empty word as a unique word
+ 	char[] charArray = word.toCharArray();
+ 	int remainder = (charArray.length % 2 ==0) ? 0 : 1;
+ 	boolean checkSecond;
+	for(int i = 0; i < charArray.length/2 + remainder; i++) {
+		checkSecond = false;
+		for(int j = 0; j < charArray.length; j++) {
+			if(charArray[i] == charArray[j] && checkSecond) return false;	
+			if(charArray[i] == charArray[j]) checkSecond=true;
+		}
+	}
+	return true;
+}
+
+public static boolean isUniqueChars(String str) {
+	if (str.length() > 128) {
+		return false;
+	}
+	boolean[] char_set = new boolean[128];
+	for (int i = 0; i < str.length(); i++) {
+		int val = str.charAt(i);
+		if (char_set[val]) return false;
+		char_set[val] = true;
+	}
+	return true;
+}
+
+
+
+}
